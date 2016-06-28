@@ -1,4 +1,4 @@
-Copyright (c) 2016, Daniel Bargmann
+Copyright (c) 2016, Fraunhofer Institute for Manufacturing Engineering and Automation (IPA)
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
