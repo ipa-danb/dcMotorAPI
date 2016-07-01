@@ -39,29 +39,31 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using namespace std;
 
-FT_HANDLE MotorDriverSPI::ftHandle;
-
 MotorDriverSPI::MotorDriverSPI() {
     dutyCycle = 0;
-    if (ftHandle == NULL) {
-        cout << "init spi" << endl;
-        initSPI();
-    }
+    ftHandle = getFT_HANDLE();
 }
 
 MotorDriverSPI::~MotorDriverSPI() {
     sendDutyCycle(0);
 }
 
-STATUS_CODE MotorDriverSPI::initSPI() {
+FT_HANDLE MotorDriverSPI::getFT_HANDLE(){
+    static FT_HANDLE handle = initSPI();
+    return handle;
+}
+
+FT_HANDLE MotorDriverSPI::initSPI() {
+    cout << "init spi" << endl;
     FT_STATUS ftStatus;
     FT4222_STATUS ft4222Status;
-    ftStatus = FT_Open(0, &MotorDriverSPI::ftHandle);
+    FT_HANDLE handle;
+    ftStatus = FT_Open(0, &handle);
     if(ftStatus == FT_OK) {
         cout<<"SPI-Port open"<<endl;
     } else {
         cout<<"Error while opening SPI-Port. Errorcode: "<<ftStatus<<endl;
-        return -1;
+        return NULL;
     }
     cout << "setting up FT4222 Device as Master... " << endl;
     ft4222Status = FT4222_SPIMaster_Init(
@@ -74,7 +76,7 @@ STATUS_CODE MotorDriverSPI::initSPI() {
     if(ft4222Status != 0){
       cout<<"Error while stting up Master. Errorcode: "<<ft4222Status<<endl;
     }
-    return 0;
+    return handle;
 }
 
 STATUS_CODE MotorDriverSPI::sendDutyCycle(int pwm) {

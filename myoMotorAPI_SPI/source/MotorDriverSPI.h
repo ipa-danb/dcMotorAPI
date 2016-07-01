@@ -91,17 +91,19 @@ private:
     SPISTREAM spistreamWrite;
     STRUCT_SENSOR_VALUES sV;
 
-    static FT_HANDLE ftHandle;
+    FT_HANDLE ftHandle;
 
     int dutyCycle;
 
     STATUS_CODE sendFrame(int pwm);
 
-    static STATUS_CODE initSPI();
+    FT_HANDLE initSPI();
 
     void swap(uint8 &source, uint8 &target);
 
     void prepareData(SPISTREAM &spistream,int datatype);
+
+    FT_HANDLE getFT_HANDLE();
 
 };
 
